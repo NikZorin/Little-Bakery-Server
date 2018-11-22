@@ -3,6 +3,7 @@ package com.zorin.by.littlebakery.littlebakery.controller;
 import com.zorin.by.littlebakery.littlebakery.dao.PostRepository;
 import com.zorin.by.littlebakery.littlebakery.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -21,8 +22,19 @@ public class PostController {
         return result;
     }
 
+    @GetMapping("/private/posts")
+    public List<Post> getPostPrivate() {
+        return getPosts();
+    }
+
     @PostMapping("/posts")
     public Post addPost(@RequestBody Post post) {
+        postRepository.save(post);
+        return post;
+    }
+
+    @PutMapping("/posts")
+    public Post updatePost(@RequestBody Post post) {
         postRepository.save(post);
         return post;
     }

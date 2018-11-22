@@ -1,10 +1,11 @@
 package com.zorin.by.littlebakery.littlebakery;
 
-import com.zorin.by.littlebakery.littlebakery.config.ApplicationSecurity;
+import com.zorin.by.littlebakery.littlebakery.security.WebSecurity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @SpringBootApplication
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public class LittleBakeryApplication {
 
 	@Bean
-	public WebSecurityConfigurerAdapter webSecurityConfigurerAdapter() {
-		return new ApplicationSecurity();
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	public static void main(String[] args) {
