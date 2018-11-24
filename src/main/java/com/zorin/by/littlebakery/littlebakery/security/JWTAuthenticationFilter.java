@@ -2,7 +2,11 @@ package com.zorin.by.littlebakery.littlebakery.security;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.zorin.by.littlebakery.littlebakery.JwtTokenDTO;
 import com.zorin.by.littlebakery.littlebakery.model.ApplicationUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,19 +21,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.zorin.by.littlebakery.littlebakery.security.SecurityConstants.EXPIRATION_TIME;
-import static com.zorin.by.littlebakery.littlebakery.security.SecurityConstants.HEADER_STRING;
 import static com.zorin.by.littlebakery.littlebakery.security.SecurityConstants.TOKEN_PREFIX;
 import static com.zorin.by.littlebakery.littlebakery.security.SecurityConstants.SECRET;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
+    private ObjectMapper mapper;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, ObjectMapper mapper) {
         this.authenticationManager = authenticationManager;
+        this.mapper = mapper;
     }
 
     @Override
@@ -58,6 +65,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(((User) authResult.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
-        response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", TOKEN_PREFIX + token);
+
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        mapper.writeValue(response.getWriter(), tokenMap);
     }
 }

@@ -1,6 +1,8 @@
 package com.zorin.by.littlebakery.littlebakery.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zorin.by.littlebakery.littlebakery.service.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,9 +21,16 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private UserDetailsServiceImpl userDetailsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public WebSecurity(UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    protected JWTAuthenticationFilter buildJWTAuthenticationFilter() throws Exception {
+        return new JWTAuthenticationFilter(authenticationManager(), objectMapper);
     }
 
     @Override
@@ -35,7 +44,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/private/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(buildJWTAuthenticationFilter())
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

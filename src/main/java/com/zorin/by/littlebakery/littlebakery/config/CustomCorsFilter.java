@@ -24,7 +24,7 @@ public class CustomCorsFilter implements Filter {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Cache-Control, X-Authorization, Content-Type, Accept, X-Requested-With, remember-me");
+        response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Authorization, Content-Type, Accept, X-Requested-With, remember-me");
 
         if (notPreflight(request)) {
             chain.doFilter(req, res);
