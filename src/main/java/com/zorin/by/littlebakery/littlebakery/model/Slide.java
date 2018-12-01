@@ -3,23 +3,21 @@ package com.zorin.by.littlebakery.littlebakery.model;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Post {
+public class Slide {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
-    @Column(length=10485760)
-    private String text;
+    private String title;
+    private String subTitle;
 
     @ManyToOne
     @JoinColumn(name = "image_id")
@@ -34,12 +32,20 @@ public class Post {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public String getTitle() {
+        return title;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
     }
 
     public Image getImage() {

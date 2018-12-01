@@ -2,10 +2,7 @@ package com.zorin.by.littlebakery.littlebakery.security;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.zorin.by.littlebakery.littlebakery.JwtTokenDTO;
 import com.zorin.by.littlebakery.littlebakery.model.ApplicationUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
